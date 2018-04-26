@@ -45,3 +45,43 @@ dataフォルダ内の以下２つのデータから予測確率を提出
 + Numpy Version: 1.14.1
 + sklearn Version: 0.19.1
 + ipywidgets Version: 7.1.2
+
+## 使用したアルゴリズム：
+アンサンブルの以下の手法を採用。採用基準は強そうなやつ。  
+
++ バギング系
+    + Random Forest
+
++ ブースティング系
+    + Gradient Boosting
+    + LightGBM
+    + XGBoost
+
+### scikit-learn以外のライブラリ
++ LightGBM
+https://github.com/Microsoft/LightGBM
+
++ XGBoost
+https://github.com/dmlc/xgboost
+
+## パラメータチューニング：
++ RandomizedSearchCVを使用。
++ cv=10,iter=10で実施。10分以上かかったので、これ以上のチューニングはやめておいた。
+
+## 学習結果
+以下の順位(F値)  
+1. LightGBM
+2. XGBoost
+3. Random Forest
+LightGBMがXGBoostを僅差で上回った。  
+
+XGBoostはまだパラメータチューニングの余地がありそうだったが、
+時間的余裕がなかったので、ここで終了。  
+
+LightGBMを採用。
+
+## まとめ
++ LightGBM・XGBoost、強すぎ。  
++ マルチコアの恩恵を受けやすいRandom Forestはやはり優秀。今回は3番手だったが、業務で日時バッチ処理を行うなら、時間的なコスト×評価スコアで採用するかもしれない。
++ 公式によると、LightGBM・XGBoost共に、"More Efficient"なGradient Boostingらしいので、
+Gradient Boostingは比較対象から外しても良かったかも。
